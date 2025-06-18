@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GimForce - Tu Mejor Versión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff4d4d;
+            --secondary-color: #333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Estilos para el menú vertical */
+        .navbar {
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            right: 0;
+            top: 0;
+            background-color: rgba(33, 37, 41, 0.95) !important;
+            padding-top: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 991px) {
+            .navbar {
+                transform: translateX(100%);
+                width: 250px;
+            }
+
+            .navbar.mobile-menu-open {
+                transform: translateX(0);
+            }
+
+            .navbar-toggler {
+                position: fixed;
+                right: 15px;
+                top: 15px;
+                z-index: 1001;
+                background-color: rgba(33, 37, 41, 0.95);
+            }
+
+            .main-content {
+                margin-right: 0;
+            }
+        }
+
+        .navbar-brand {
+            text-align: center;
+            width: 100%;
+            padding: 15px 0;
+            margin-right: 0 !important;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-brand i {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .navbar-nav {
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .nav-link {
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateX(-5px);
+        }
+
+        /* Ajuste para el contenido principal */
+        .main-content {
+            margin-right: 200px;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .class-card {
+            transition: transform 0.3s;
+        }
+
+        .class-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .trainer-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #ff3333;
+            transform: scale(1.05);
+        }
+
+        /* Estilos para el modal de registro */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .training-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .training-gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .training-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .registration-form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .registration-form button {
+            width: 100%;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #28a745;
+        }
+
+        /* Estilos para los submenús */
+        .submenu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(50, 55, 60, 0.95);
+        }
+
+        .nav-item.active .submenu {
+            max-height: 300px;
+        }
+
+        .submenu li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            display: block;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .submenu li a:hover {
+            background-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .nav-item > .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item > .nav-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+
+        .nav-item.active > .nav-link::after {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid flex-column">
+            <a class="navbar-brand d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#ubicacionModal">
+                <i class="fas fa-map-marker-alt me-2"></i>
+                GimForce
+                <small class="ms-2 text-warning" style="font-size: 0.8em;">(Ver ubicación)</small>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-column" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inicio">Inicio</a>
+                        <ul class="submenu">
+                            <li><a href="#bienvenida">Bienvenida</a></li>
+                            <li><a href="#novedades">Novedades</a></li>
+                            <li><a href="#horarios">Horarios</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#clases">Clases</a>
+                        <ul class="submenu">
+                            <li><a href="#crossfit">CrossFit</a></li>
+                            <li><a href="#yoga">Yoga</a></li>
+                            <li><a href="#spinning">Spinning</a></li>
+                            <li><a href="#funcional">Funcional</a></li>
+                            <li><a href="#boxeo">Boxeo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#entrenadores">Entrenadores</a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#carlosModal">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://hips.hearstapps.com/hmg-prod/images/ronnie-coleman-1645521680.jpg" 
+                                             class="rounded-circle me-2" 
+                                             alt="Carlos Pereyra" 
+                                             style="width: 30px; height: 30px; object-fit: cover;">
+                                        <span>Carlos Pereyra</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#jorgeModal">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIEmXzr7uavfPnocFsN5gZL89_EJOkuKJVUw&s" 
+                                             class="rounded-circle me-2" 
+                                             alt="Jorge Roman" 
+                                             style="width: 30px; height: 30px; object-fit: cover;">
+                                        <span>Jorge Roman</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#pamelaModal">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://s1.ppllstatics.com/mujerhoy/www/multimedia/202106/14/media/cortadas/entrenadores-personales-kW1D-U140702973884x9H-1248x1248@MujerHoy.jpg" 
+                                             class="rounded-circle me-2" 
+                                             alt="Pamela Froilan" 
+                                             style="width: 30px; height: 30px; object-fit: cover;">
+                                        <span>Pamela Froilan</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><a href="#nuestro-equipo">Ver Equipo Completo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#precios">Precios</a>
+                        <ul class="submenu">
+                            <li><a href="#planes-mensuales">Planes Mensuales</a></li>
+                            <li><a href="#promociones">Promociones</a></li>
+                            <li><a href="#estudiantes">Descuentos Estudiantes</a></li>
+                            <li><a href="#corporativo">Planes Corporativos</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                        <ul class="submenu">
+                            <li><a href="#ubicacion">Ubicación</a></li>
+                            <li><a href="#redes-sociales">Redes Sociales</a></li>
+                            <li><a href="#whatsapp">WhatsApp</a></li>
+                            <li><a href="#consultas">Consultas</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wrapper para el contenido principal -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section id="inicio" class="hero-section d-flex align-items-center">
+            <div class="container text-center">
+                <h1 class="display-1 fw-bold mb-4">Transforma Tu Vida</h1>
+                <p class="lead mb-4">Alcanza tus objetivos fitness con los mejores entrenadores y equipamiento</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button class="cta-button" data-bs-toggle="modal" data-bs-target="#registroModal">¡Comienza Ahora!</button>
+                    <button class="cta-button btn-outline" data-bs-toggle="modal" data-bs-target="#clasePruebaModal" style="background: transparent; border: 2px solid var(--primary-color); color: white;">Clase de Prueba Gratis</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clases Section -->
+        <section id="clases" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Nuestras Clases</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card class-card">
+                            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Crossfit">
+                            <div class="card-body">
+                                <h5 class="card-title">CrossFit</h5>
+                                <p class="card-text">Entrenamiento funcional de alta intensidad para mejorar tu condición física general.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card class-card">
+                            <img src="https://images.unsplash.com/photo-1593810450967-f9c42742e326?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Yoga">
+                            <div class="card-body">
+                                <h5 class="card-title">Yoga</h5>
+                                <p class="card-text">Encuentra tu equilibrio interior y mejora tu flexibilidad con nuestras clases de yoga.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card class-card">
+                            <img src="https://images.unsplash.com/photo-1598632640487-6ea4a4e8b963?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Spinning">
+                            <div class="card-body">
+                                <h5 class="card-title">Spinning</h5>
+                                <p class="card-text">Cardio intenso con música motivadora para quemar calorías y mejorar tu resistencia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Entrenadores Section -->
+        <section id="entrenadores" class="section-padding">
+            <div class="container">
+                <h2 class="text-center mb-5">Nuestros Entrenadores</h2>
+                <div class="row text-center g-4">
+                    <div class="col-md-4">
+                        <img src="https://hips.hearstapps.com/hmg-prod/images/ronnie-coleman-1645521680.jpg" class="trainer-img mb-3" alt="Carlos Pereyra">
+                        <h4>Carlos Pereyra</h4>
+                        <p>Especialista en Musculación</p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIEmXzr7uavfPnocFsN5gZL89_EJOkuKJVUw&s" class="trainer-img mb-3" alt="Jorge Roman">
+                        <h4>Jorge Roman</h4>
+                        <p>Entrenador de CrossFit</p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="https://s1.ppllstatics.com/mujerhoy/www/multimedia/202106/14/media/cortadas/entrenadores-personales-kW1D-U140702973884x9H-1248x1248@MujerHoy.jpg" class="trainer-img mb-3" alt="Pamela Froilan">
+                        <h4>Pamela Froilan</h4>
+                        <p>Instructora de Fitness Grupal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Precios Section -->
+        <section id="precios" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Planes y Precios</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Básico</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">$15,000/mes</h6>
+                                <ul class="list-unstyled">
+                                    <li>Acceso a sala de máquinas</li>
+                                    <li>2 clases grupales/semana</li>
+                                    <li>Casillero básico</li>
+                                </ul>
+                                <button class="cta-button">Seleccionar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Premium</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">$25,000/mes</h6>
+                                <ul class="list-unstyled">
+                                    <li>Acceso ilimitado a sala</li>
+                                    <li>Clases grupales ilimitadas</li>
+                                    <li>1 sesión PT/mes</li>
+                                    <li>Casillero premium</li>
+                                </ul>
+                                <button class="cta-button">Seleccionar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Elite</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">$40,000/mes</h6>
+                                <ul class="list-unstyled">
+                                    <li>Todo incluido Premium</li>
+                                    <li>4 sesiones PT/mes</li>
+                                    <li>Plan nutricional</li>
+                                    <li>Acceso a spa</li>
+                                </ul>
+                                <button class="cta-button">Seleccionar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto Section -->
+        <section id="contacto" class="section-padding">
+            <div class="container">
+                <h2 class="text-center mb-5">Contacto</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <form>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="5" placeholder="Mensaje"></textarea>
+                            </div>
+                            <button type="submit" class="cta-button">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5><i class="fas fa-map-marker-alt me-2"></i>Ubicación</h5>
+                            <p>Viedma, Río Negro, Argentina</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5><i class="fas fa-phone me-2"></i>Teléfono</h5>
+                            <p>+54 2920 123456</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5><i class="fas fa-envelope me-2"></i>Email</h5>
+                            <p>gimforce@gmail.com</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5><i class="fas fa-clock me-2"></i>Horario</h5>
+                            <p>Lunes - Viernes: 6:00 - 22:00<br>
+                            Sábados: 8:00 - 20:00<br>
+                            Domingos: 9:00 - 18:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>GimForce</h5>
+                        <p>Tu mejor versión comienza aquí.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Enlaces Rápidos</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#inicio" class="text-white">Inicio</a></li>
+                            <li><a href="#clases" class="text-white">Clases</a></li>
+                            <li><a href="#entrenadores" class="text-white">Entrenadores</a></li>
+                            <li><a href="#precios" class="text-white">Precios</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Síguenos</h5>
+                        <div class="social-links">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registroModalLabel">Comienza Tu Transformación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="training-gallery">
+                        <img src="https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Entrenamiento 1">
+                        <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Entrenamiento 2">
+                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Entrenamiento 3">
+                        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Entrenamiento 4">
+                    </div>
+                    
+                    <form id="registrationForm" class="registration-form">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="apellido" placeholder="Apellido" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                        </div>
+                        <button type="submit" class="cta-button">Registrarme</button>
+                    </form>
+
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle fa-3x mb-3"></i>
+                        <h4>¡Registro Exitoso!</h4>
+                        <p>Nos pondremos en contacto contigo pronto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales para submenús -->
+    
+    <!-- Modales de Inicio -->
+    <div class="modal fade" id="bienvenidaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">¡Bienvenido a GimForce!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48" class="img-fluid rounded mb-4" alt="Bienvenida">
+                    <h3>"Tu transformación comienza hoy"</h3>
+                    <p class="lead">En GimForce no solo construimos cuerpos fuertes, construimos personas más fuertes, determinadas y saludables.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="novedadesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novedades</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a" class="card-img-top" alt="Nuevas Clases">
+                                <div class="card-body">
+                                    <h5>Nuevas Clases de HIIT</h5>
+                                    <p>¡Incorporamos nuevas clases de entrenamiento de alta intensidad!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c" class="card-img-top" alt="Nuevo Equipamiento">
+                                <div class="card-body">
+                                    <h5>Nuevo Equipamiento</h5>
+                                    <p>Renovamos todas nuestras máquinas con tecnología de última generación.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="horariosModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Horarios de Clases</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Lunes</th>
+                                    <th>Martes</th>
+                                    <th>Miércoles</th>
+                                    <th>Jueves</th>
+                                    <th>Viernes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>08:00</td>
+                                    <td>CrossFit</td>
+                                    <td>Spinning</td>
+                                    <td>CrossFit</td>
+                                    <td>Yoga</td>
+                                    <td>Funcional</td>
+                                </tr>
+                                <tr>
+                                    <td>10:00</td>
+                                    <td>Yoga</td>
+                                    <td>Funcional</td>
+                                    <td>Spinning</td>
+                                    <td>CrossFit</td>
+                                    <td>Boxeo</td>
+                                </tr>
+                                <tr>
+                                    <td>17:00</td>
+                                    <td>Spinning</td>
+                                    <td>CrossFit</td>
+                                    <td>Boxeo</td>
+                                    <td>Funcional</td>
+                                    <td>Yoga</td>
+                                </tr>
+                                <tr>
+                                    <td>19:00</td>
+                                    <td>Funcional</td>
+                                    <td>Boxeo</td>
+                                    <td>Yoga</td>
+                                    <td>Spinning</td>
+                                    <td>CrossFit</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales de Entrenadores -->
+    <div class="modal fade" id="nuestroEquipoModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Nuestro Equipo de Profesionales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <!-- Carlos Pereyra -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://hips.hearstapps.com/hmg-prod/images/ronnie-coleman-1645521680.jpg" class="card-img-top" alt="Carlos Pereyra">
+                                <div class="card-body">
+                                    <h5 class="card-title">Carlos Pereyra</h5>
+                                    <h6 class="text-muted mb-3">Especialista en Musculación</h6>
+                                    <p class="card-text">Con más de 10 años de experiencia en el mundo del fitness, Carlos es experto en musculación y rehabilitación deportiva. Campeón nacional de fisicoculturismo 2019.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">Musculación</span>
+                                        <span class="badge bg-primary me-1">CrossFit</span>
+                                        <span class="badge bg-primary me-1">TRX</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Certificado TRX</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>CrossFit Level 1</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Rehabilitación Deportiva</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#carlosModal">Ver Perfil Completo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Jorge Roman -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIEmXzr7uavfPnocFsN5gZL89_EJOkuKJVUw&s" class="card-img-top" alt="Jorge Roman">
+                                <div class="card-body">
+                                    <h5 class="card-title">Jorge Roman</h5>
+                                    <h6 class="text-muted mb-3">Entrenador de CrossFit</h6>
+                                    <p class="card-text">Atleta de élite con 8 años de experiencia en CrossFit. Top 10 en CrossFit Games Regionales 2019 y campeón nacional de halterofilia 2018.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">CrossFit</span>
+                                        <span class="badge bg-primary me-1">Halterofilia</span>
+                                        <span class="badge bg-primary me-1">HIIT</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>CrossFit Level 2</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Gimnasia Olímpica</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Primeros Auxilios</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#jorgeModal">Ver Perfil Completo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pamela Froilan -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://s1.ppllstatics.com/mujerhoy/www/multimedia/202106/14/media/cortadas/entrenadores-personales-kW1D-U140702973884x9H-1248x1248@MujerHoy.jpg" class="card-img-top" alt="Pamela Froilan">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pamela Froilan</h5>
+                                    <h6 class="text-muted mb-3">Instructora de Fitness Grupal</h6>
+                                    <p class="card-text">Licenciada en Educación Física con 12 años de experiencia. Especialista en clases grupales y nutrición deportiva.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">Spinning</span>
+                                        <span class="badge bg-primary me-1">Yoga</span>
+                                        <span class="badge bg-primary me-1">Zumba</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Zumba Instructor</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Yoga Alliance RYT-200</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Spinning Master</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#pamelaModal">Ver Perfil Completo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ana Martinez -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48" class="card-img-top" alt="Ana Martinez">
+                                <div class="card-body">
+                                    <h5 class="card-title">Ana Martinez</h5>
+                                    <h6 class="text-muted mb-3">Nutricionista Deportiva</h6>
+                                    <p class="card-text">Especialista en nutrición deportiva con enfoque en rendimiento atlético y pérdida de peso saludable.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">Nutrición Deportiva</span>
+                                        <span class="badge bg-primary me-1">Control de Peso</span>
+                                        <span class="badge bg-primary me-1">Suplementación</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Lic. en Nutrición</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Especialista en Nutrición Deportiva</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>ISAK Nivel 2</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marco Diaz -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b" class="card-img-top" alt="Marco Diaz">
+                                <div class="card-body">
+                                    <h5 class="card-title">Marco Diaz</h5>
+                                    <h6 class="text-muted mb-3">Entrenador de Boxeo</h6>
+                                    <p class="card-text">Ex boxeador profesional con 15 años de experiencia en entrenamiento. Especialista en técnicas de boxeo y acondicionamiento físico.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">Boxeo</span>
+                                        <span class="badge bg-primary me-1">Kickboxing</span>
+                                        <span class="badge bg-primary me-1">Defensa Personal</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Entrenador FAB</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Instructor Kickboxing</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Primeros Auxilios</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Laura Sánchez -->
+                        <div class="col-md-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a" class="card-img-top" alt="Laura Sánchez">
+                                <div class="card-body">
+                                    <h5 class="card-title">Laura Sánchez</h5>
+                                    <h6 class="text-muted mb-3">Instructora de Pilates</h6>
+                                    <p class="card-text">Especialista en Pilates y rehabilitación postural. Experta en trabajo con adultos mayores y recuperación de lesiones.</p>
+                                    <div class="mb-3">
+                                        <h6>Especialidades:</h6>
+                                        <span class="badge bg-primary me-1">Pilates</span>
+                                        <span class="badge bg-primary me-1">Rehabilitación</span>
+                                        <span class="badge bg-primary me-1">Stretching</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Certificaciones:</h6>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fas fa-check text-success me-2"></i>Certificación Pilates</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Terapia Física</li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Yoga Terapéutico</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <p class="text-muted mb-0"><small>Nuestro equipo está en constante formación para brindarte el mejor servicio</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detallado de Carlos Pereyra -->
+    <div class="modal fade" id="carlosModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Carlos Pereyra - Perfil Profesional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="https://hips.hearstapps.com/hmg-prod/images/ronnie-coleman-1645521680.jpg" class="img-fluid rounded-circle mb-3" alt="Carlos Pereyra">
+                            <div class="text-center">
+                                <h4>Carlos Pereyra</h4>
+                                <p class="text-muted">Especialista en Musculación</p>
+                                <div class="social-links mt-3">
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-instagram"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-linkedin"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="border-bottom pb-2">Sobre Carlos</h5>
+                            <p class="lead">Con más de 10 años de experiencia en el mundo del fitness, Carlos ha ayudado a cientos de personas a alcanzar sus objetivos de forma segura y efectiva.</p>
+                            
+                            <h5 class="mt-4 border-bottom pb-2">Logros Profesionales</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-trophy text-warning me-2"></i>Campeón Nacional de Fisicoculturismo 2019</li>
+                                <li><i class="fas fa-medal text-secondary me-2"></i>Subcampeón Sudamericano 2018</li>
+                                <li><i class="fas fa-award text-info me-2"></i>Mejor Entrenador del Año 2020 - GimForce</li>
+                            </ul>
+
+                            <h5 class="mt-4 border-bottom pb-2">Especialidades</h5>
+                            <div class="row g-2 mb-4">
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-dumbbell text-primary me-2"></i>Musculación</h6>
+                                            <p class="card-text small">Programas personalizados de hipertrofia y fuerza</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-heartbeat text-danger me-2"></i>CrossFit</h6>
+                                            <p class="card-text small">Entrenamiento funcional de alta intensidad</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-running text-success me-2"></i>TRX</h6>
+                                            <p class="card-text small">Entrenamiento en suspensión avanzado</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5 class="mt-4 border-bottom pb-2">Horarios de Clases</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Día</th>
+                                            <th>Horario</th>
+                                            <th>Clase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Lunes</td>
+                                            <td>08:00 - 10:00</td>
+                                            <td>Musculación</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Martes</td>
+                                            <td>17:00 - 19:00</td>
+                                            <td>CrossFit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jueves</td>
+                                            <td>08:00 - 10:00</td>
+                                            <td>TRX</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clasePruebaModal">
+                                    <i class="fas fa-calendar-check me-2"></i>Agenda una clase con Carlos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detallado de Jorge Roman -->
+    <div class="modal fade" id="jorgeModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Jorge Roman - Perfil Profesional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIEmXzr7uavfPnocFsN5gZL89_EJOkuKJVUw&s" class="img-fluid rounded-circle mb-3" alt="Jorge Roman">
+                            <div class="text-center">
+                                <h4>Jorge Roman</h4>
+                                <p class="text-muted">Entrenador de CrossFit</p>
+                                <div class="social-links mt-3">
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-instagram"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-linkedin"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="border-bottom pb-2">Sobre Jorge</h5>
+                            <p class="lead">Atleta de élite con 8 años de experiencia en CrossFit. Su pasión por el deporte y la excelencia lo ha llevado a competir en los más altos niveles.</p>
+                            
+                            <h5 class="mt-4 border-bottom pb-2">Logros Profesionales</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-trophy text-warning me-2"></i>Top 10 CrossFit Games Regionales 2019</li>
+                                <li><i class="fas fa-medal text-secondary me-2"></i>Campeón Nacional de Halterofilia 2018</li>
+                                <li><i class="fas fa-award text-info me-2"></i>Certificado CrossFit Level 2</li>
+                            </ul>
+
+                            <h5 class="mt-4 border-bottom pb-2">Especialidades</h5>
+                            <div class="row g-2 mb-4">
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-fire text-danger me-2"></i>CrossFit</h6>
+                                            <p class="card-text small">Programación WOD y técnica avanzada</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-dumbbell text-primary me-2"></i>Halterofilia</h6>
+                                            <p class="card-text small">Técnica olímpica y powerlifting</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-heartbeat text-success me-2"></i>HIIT</h6>
+                                            <p class="card-text small">Entrenamiento de alta intensidad</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5 class="mt-4 border-bottom pb-2">Horarios de Clases</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Día</th>
+                                            <th>Horario</th>
+                                            <th>Clase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Lunes</td>
+                                            <td>17:00 - 19:00</td>
+                                            <td>CrossFit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Miércoles</td>
+                                            <td>08:00 - 10:00</td>
+                                            <td>Halterofilia</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Viernes</td>
+                                            <td>17:00 - 19:00</td>
+                                            <td>HIIT</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clasePruebaModal">
+                                    <i class="fas fa-calendar-check me-2"></i>Agenda una clase con Jorge
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detallado de Pamela Froilan -->
+    <div class="modal fade" id="pamelaModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Pamela Froilan - Perfil Profesional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="https://s1.ppllstatics.com/mujerhoy/www/multimedia/202106/14/media/cortadas/entrenadores-personales-kW1D-U140702973884x9H-1248x1248@MujerHoy.jpg" class="img-fluid rounded-circle mb-3" alt="Pamela Froilan">
+                            <div class="text-center">
+                                <h4>Pamela Froilan</h4>
+                                <p class="text-muted">Instructora de Fitness Grupal</p>
+                                <div class="social-links mt-3">
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-instagram"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-linkedin"></i></a>
+                                    <a href="#" class="btn btn-outline-primary btn-sm"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="border-bottom pb-2">Sobre Pamela</h5>
+                            <p class="lead">Licenciada en Educación Física con 12 años de experiencia en fitness grupal. Su energía y dedicación inspiran a cada uno de sus alumnos.</p>
+                            
+                            <h5 class="mt-4 border-bottom pb-2">Formación y Certificaciones</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-graduation-cap text-primary me-2"></i>Lic. en Educación Física - UNRN</li>
+                                <li><i class="fas fa-certificate text-warning me-2"></i>Instructora Certificada Zumba</li>
+                                <li><i class="fas fa-yoga text-info me-2"></i>Yoga Alliance RYT-200</li>
+                                <li><i class="fas fa-bicycle text-success me-2"></i>Spinning Master Trainer</li>
+                            </ul>
+
+                            <h5 class="mt-4 border-bottom pb-2">Especialidades</h5>
+                            <div class="row g-2 mb-4">
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-music text-danger me-2"></i>Zumba</h6>
+                                            <p class="card-text small">Clases dinámicas y divertidas</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-om text-primary me-2"></i>Yoga</h6>
+                                            <p class="card-text small">Flow y meditación</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fas fa-bicycle text-success me-2"></i>Spinning</h6>
+                                            <p class="card-text small">Cardio de alto rendimiento</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5 class="mt-4 border-bottom pb-2">Horarios de Clases</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Día</th>
+                                            <th>Horario</th>
+                                            <th>Clase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Martes</td>
+                                            <td>09:00 - 10:00</td>
+                                            <td>Yoga</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jueves</td>
+                                            <td>18:00 - 19:00</td>
+                                            <td>Zumba</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sábado</td>
+                                            <td>10:00 - 11:00</td>
+                                            <td>Spinning</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clasePruebaModal">
+                                    <i class="fas fa-calendar-check me-2"></i>Agenda una clase con Pamela
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Certificaciones -->
+    <div class="modal fade" id="certificacionesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Certificaciones y Acreditaciones</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-certificate text-warning me-2"></i>CrossFit Affiliate</h5>
+                                    <p class="card-text">Box oficialmente certificado por CrossFit Inc. Cumplimos con todos los estándares internacionales de calidad y seguridad.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-heart text-danger me-2"></i>Primeros Auxilios</h5>
+                                    <p class="card-text">Todo nuestro personal está certificado en RCP y primeros auxilios por la Cruz Roja Argentina.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-dumbbell text-primary me-2"></i>NSCA</h5>
+                                    <p class="card-text">Certificación internacional en entrenamiento de fuerza y acondicionamiento físico.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-shield-alt text-success me-2"></i>ISO 9001</h5>
+                                    <p class="card-text">Certificación de calidad en gestión y servicios deportivos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="lead">Nuestro compromiso es brindar el mejor servicio con los más altos estándares de calidad y seguridad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Especialidades -->
+    <div class="modal fade" id="especialidadesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuestras Especialidades</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-running fa-3x text-primary mb-3"></i>
+                                    <h5>Entrenamiento Funcional</h5>
+                                    <p>Mejora tu condición física general con ejercicios que simulan movimientos cotidianos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-dumbbell fa-3x text-danger mb-3"></i>
+                                    <h5>Musculación</h5>
+                                    <p>Desarrolla tu fuerza y masa muscular con programas personalizados.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-heartbeat fa-3x text-success mb-3"></i>
+                                    <h5>Cardio</h5>
+                                    <p>Mejora tu resistencia cardiovascular con diferentes modalidades de entrenamiento.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Metodología de Entrenamiento</h5>
+                                    <p>Nuestro enfoque se basa en:</p>
+                                    <ul>
+                                        <li>Evaluación inicial personalizada</li>
+                                        <li>Programación progresiva</li>
+                                        <li>Seguimiento continuo</li>
+                                        <li>Ajustes según objetivos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales de Clases -->
+    <div class="modal fade" id="crossfitModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">CrossFit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5" class="img-fluid rounded mb-3" alt="CrossFit">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Sobre la clase</h4>
+                            <p>Entrenamiento funcional de alta intensidad que combina ejercicios cardiovasculares, gimnásticos y de levantamiento de pesas.</p>
+                            <h5>Beneficios</h5>
+                            <ul>
+                                <li>Mejora la resistencia cardiovascular</li>
+                                <li>Aumenta la fuerza y potencia</li>
+                                <li>Desarrolla la agilidad y flexibilidad</li>
+                                <li>Quema calorías eficientemente</li>
+                            </ul>
+                            <h5>Horarios Disponibles</h5>
+                            <p>Lunes y Miércoles: 8:00, 17:00<br>
+                            Martes y Jueves: 10:00, 19:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="yogaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yoga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1603988363607-e1e4a66962c6" class="img-fluid rounded mb-3" alt="Yoga">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Sobre la clase</h4>
+                            <p>Encuentra tu equilibrio interior y mejora tu flexibilidad con nuestras clases de yoga.</p>
+                            <h5>Beneficios</h5>
+                            <ul>
+                                <li>Mejora la flexibilidad y equilibrio</li>
+                                <li>Reduce el estrés</li>
+                                <li>Fortalece el cuerpo y la mente</li>
+                                <li>Mejora la postura</li>
+                            </ul>
+                            <h5>Horarios Disponibles</h5>
+                            <p>Lunes: 10:00<br>Jueves: 8:00<br>Viernes: 17:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="spinningModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Spinning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb" class="img-fluid rounded mb-3" alt="Spinning">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Sobre la clase</h4>
+                            <p>Cardio intenso con música motivadora para quemar calorías y mejorar tu resistencia.</p>
+                            <h5>Beneficios</h5>
+                            <ul>
+                                <li>Quema hasta 600 calorías por sesión</li>
+                                <li>Mejora la resistencia cardiovascular</li>
+                                <li>Tonifica piernas y glúteos</li>
+                                <li>Bajo impacto en articulaciones</li>
+                            </ul>
+                            <h5>Horarios Disponibles</h5>
+                            <p>Martes: 8:00<br>Miércoles: 10:00<br>Jueves: 19:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="funcionalModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Entrenamiento Funcional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1434596922112-19c563067271" class="img-fluid rounded mb-3" alt="Funcional">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Sobre la clase</h4>
+                            <p>Entrenamiento que simula movimientos de la vida diaria para mejorar tu condición física general.</p>
+                            <h5>Beneficios</h5>
+                            <ul>
+                                <li>Mejora la coordinación</li>
+                                <li>Aumenta la fuerza funcional</li>
+                                <li>Previene lesiones</li>
+                                <li>Mejora el equilibrio</li>
+                            </ul>
+                            <h5>Horarios Disponibles</h5>
+                            <p>Martes: 10:00<br>Jueves: 17:00<br>Viernes: 8:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="boxeoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Boxeo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed" class="img-fluid rounded mb-3" alt="Boxeo">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Sobre la clase</h4>
+                            <p>Aprende técnicas de boxeo mientras realizas un entrenamiento cardiovascular intenso.</p>
+                            <h5>Beneficios</h5>
+                            <ul>
+                                <li>Mejora la resistencia</li>
+                                <li>Desarrolla coordinación</li>
+                                <li>Reduce el estrés</li>
+                                <li>Tonifica todo el cuerpo</li>
+                            </ul>
+                            <h5>Horarios Disponibles</h5>
+                            <p>Martes: 19:00<br>Miércoles: 17:00<br>Viernes: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales de Precios -->
+    <div class="modal fade" id="planesMensualesModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Planes Mensuales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0">Plan Básico</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="card-title pricing-card-title">$15,000<small class="text-muted">/mes</small></h2>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li><i class="fas fa-check text-success me-2"></i>Acceso a sala de máquinas</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>2 clases grupales/semana</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Casillero básico</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Evaluación inicial</li>
+                                    </ul>
+                                    <button class="w-100 btn btn-lg btn-primary">Seleccionar Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="card-title mb-0">Plan Premium</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="card-title pricing-card-title">$25,000<small class="text-muted">/mes</small></h2>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li><i class="fas fa-check text-success me-2"></i>Acceso ilimitado a sala</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Clases grupales ilimitadas</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>1 sesión PT/mes</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Casillero premium</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Evaluación mensual</li>
+                                    </ul>
+                                    <button class="w-100 btn btn-lg btn-success">Seleccionar Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-danger">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="card-title mb-0">Plan Elite</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="card-title pricing-card-title">$40,000<small class="text-muted">/mes</small></h2>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <li><i class="fas fa-check text-success me-2"></i>Todo incluido Premium</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>4 sesiones PT/mes</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Plan nutricional</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Acceso a spa</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Evaluación semanal</li>
+                                    </ul>
+                                    <button class="w-100 btn btn-lg btn-danger">Seleccionar Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="promocionesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Promociones Especiales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title text-danger">¡50% OFF!</h3>
+                                    <h5>Primera Mensualidad</h5>
+                                    <p>Para nuevos miembros en cualquier plan</p>
+                                    <hr>
+                                    <ul class="list-unstyled">
+                                        <li>Plan Básico: $7,500</li>
+                                        <li>Plan Premium: $12,500</li>
+                                        <li>Plan Elite: $20,000</li>
+                                    </ul>
+                                    <button class="btn btn-warning mt-3">¡Aprovechar Ahora!</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title text-primary">Plan Familiar</h3>
+                                    <h5>25% OFF</h5>
+                                    <p>Para grupos familiares de 3 o más personas</p>
+                                    <hr>
+                                    <ul class="list-unstyled">
+                                        <li>Acceso a todas las instalaciones</li>
+                                        <li>Clases grupales incluidas</li>
+                                        <li>Casilleros familiares</li>
+                                    </ul>
+                                    <button class="btn btn-primary mt-3">Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="estudiantesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">Descuentos para Estudiantes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>¡20% de descuento adicional!</h4>
+                            <p class="lead">Para estudiantes con credencial vigente</p>
+                            <ul class="list-group list-group-flush mb-4">
+                                <li class="list-group-item">
+                                    <h6>Plan Básico Estudiante</h6>
+                                    <p class="mb-0"><del>$15,000</del> <strong class="text-success">$12,000/mes</strong></p>
+                                </li>
+                                <li class="list-group-item">
+                                    <h6>Plan Premium Estudiante</h6>
+                                    <p class="mb-0"><del>$25,000</del> <strong class="text-success">$20,000/mes</strong></p>
+                                </li>
+                                <li class="list-group-item">
+                                    <h6>Plan Elite Estudiante</h6>
+                                    <p class="mb-0"><del>$40,000</del> <strong class="text-success">$32,000/mes</strong></p>
+                                </li>
+                            </ul>
+                            <button class="btn btn-info text-white">Solicitar Descuento</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Requisitos</h5>
+                                    <ul>
+                                        <li>Credencial de estudiante vigente</li>
+                                        <li>Comprobante de inscripción actual</li>
+                                        <li>Documento de identidad</li>
+                                    </ul>
+                                    <h5 class="card-title mt-4">Beneficios Adicionales</h5>
+                                    <ul>
+                                        <li>Horarios flexibles</li>
+                                        <li>Congelamiento en período de exámenes</li>
+                                        <li>Acceso a grupos de estudio en el área de descanso</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="corporativoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Planes Corporativos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-12 mb-4">
+                            <h4>Beneficios para Empresas</h4>
+                            <p class="lead">Mejora la productividad y el bienestar de tus empleados</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pequeña Empresa</h5>
+                                    <p class="card-text">5-20 empleados</p>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>15% de descuento</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Horarios flexibles</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>1 clase grupal privada/mes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Mediana Empresa</h5>
+                                    <p class="card-text">21-50 empleados</p>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>25% de descuento</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Clases in-company</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Evaluación grupal mensual</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Gran Empresa</h5>
+                                    <p class="card-text">+50 empleados</p>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>35% de descuento</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Gimnasio in-company</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Nutricionista dedicado</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5>Beneficios Adicionales</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul>
+                                                <li>Reportes de asistencia mensual</li>
+                                                <li>Programa de wellness corporativo</li>
+                                                <li>Eventos especiales para empleados</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul>
+                                                <li>Asesoramiento en ergonomía</li>
+                                                <li>Charlas de salud y bienestar</li>
+                                                <li>Desafíos corporativos mensuales</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-dark mt-3">Solicitar Información</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales de Contacto -->
+    <div class="modal fade" id="ubicacionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Nuestra Ubicación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>GimForce</h4>
+                            <p class="lead">Viedma, Río Negro, Argentina</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-map-marker-alt text-primary me-2"></i>Calle Principal 123</li>
+                                <li><i class="fas fa-phone text-primary me-2"></i>+54 2920 123456</li>
+                                <li><i class="fas fa-envelope text-primary me-2"></i>info@gimforce.com</li>
+                            </ul>
+                            <h5 class="mt-4">Medios de Transporte</h5>
+                            <ul>
+                                <li>Líneas de colectivo: 1, 2, 5</li>
+                                <li>Estacionamiento propio</li>
+                                <li>Bicicletero seguro</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ratio ratio-4x3">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890!2d-63.0000!3d-40.8000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM40zMCcwMC4wIlMgNjPCsDAwJzAwLjAiVw!5e0!3m2!1ses!2sar!4v1234567890" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="redesSocialesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient text-white" style="background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);">
+                    <h5 class="modal-title">Síguenos en Redes Sociales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fab fa-instagram fa-4x mb-3" style="color: #C13584;"></i>
+                                    <h5>Instagram</h5>
+                                    <p>@GimForce</p>
+                                    <p>Fotos y videos de entrenamientos, tips y más</p>
+                                    <a href="https://instagram.com/gimforce" target="_blank" class="btn btn-outline-primary">Seguir</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fab fa-facebook fa-4x mb-3" style="color: #1877F2;"></i>
+                                    <h5>Facebook</h5>
+                                    <p>GimForce Oficial</p>
+                                    <p>Eventos, promociones y comunidad</p>
+                                    <a href="https://facebook.com/gimforce" target="_blank" class="btn btn-outline-primary">Me gusta</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fab fa-tiktok fa-4x mb-3"></i>
+                                    <h5>TikTok</h5>
+                                    <p>@GimForce.fit</p>
+                                    <p>Rutinas cortas y motivación diaria</p>
+                                    <a href="https://tiktok.com/@gimforce.fit" target="_blank" class="btn btn-outline-dark">Seguir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">¿Por qué seguirnos?</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul>
+                                                <li>Contenido exclusivo</li>
+                                                <li>Promociones especiales</li>
+                                                <li>Tips de entrenamiento</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul>
+                                                <li>Eventos en vivo</li>
+                                                <li>Desafíos mensuales</li>
+                                                <li>Comunidad activa</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="whatsappModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Contacto WhatsApp</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fab fa-whatsapp fa-5x text-success mb-3"></i>
+                    <h4>¡Escríbenos!</h4>
+                    <p class="lead">Respuesta inmediata de Lunes a Sábado de 8:00 a 21:00</p>
+                    <a href="https://wa.me/542920123456" target="_blank" class="btn btn-success btn-lg mt-3">
+                        <i class="fab fa-whatsapp me-2"></i>Iniciar Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="consultasModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">Consultas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="consultaForm">
+                        <div class="mb-3">
+                            <label for="nombreConsulta" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreConsulta" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailConsulta" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailConsulta" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefonoConsulta" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefonoConsulta">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensajeConsulta" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensajeConsulta" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-info text-white w-100">Enviar Consulta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio de fondo -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="Alesso _ Sumr Camp - In The Middle (Extended Mix).mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Control de música flotante con texto y volumen -->
+    <div class="position-fixed bottom-0 end-0 m-3 p-3 bg-dark rounded-3 shadow" style="z-index: 1000;">
+        <div class="d-flex align-items-center gap-2">
+            <button id="musicToggle" class="btn btn-dark d-flex align-items-center" style="cursor: pointer;">
+                <i class="fas fa-play text-white me-2"></i>
+                <span id="musicStatus" class="text-white" style="font-size: 0.9rem;">Reproducir música</span>
+            </button>
+            <div class="d-flex align-items-center">
+                <i class="fas fa-volume-down text-white me-2"></i>
+                <input type="range" id="volumeControl" class="form-range" min="0" max="1" step="0.1" value="0.5" style="width: 80px;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Clase de Prueba -->
+    <div class="modal fade" id="clasePruebaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Reserva tu Clase de Prueba Gratuita</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48" class="img-fluid rounded" alt="Clase de prueba">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>¡Prueba una clase gratis!</h4>
+                            <p class="lead">Experimenta la calidad de nuestras instalaciones y la profesionalidad de nuestros entrenadores.</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Sin compromiso</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Asesoramiento personalizado</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Evaluación inicial incluida</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <form id="clasePruebaForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="nombrePrueba" placeholder="Nombre completo" required>
+                                    <label for="nombrePrueba">Nombre completo</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="emailPrueba" placeholder="Email" required>
+                                    <label for="emailPrueba">Email</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="tel" class="form-control" id="telefonoPrueba" placeholder="Teléfono" required>
+                                    <label for="telefonoPrueba">Teléfono</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="disciplinaPrueba" required>
+                                        <option value="">Selecciona una disciplina</option>
+                                        <option value="crossfit">CrossFit</option>
+                                        <option value="musculacion">Musculación</option>
+                                        <option value="yoga">Yoga</option>
+                                        <option value="spinning">Spinning</option>
+                                        <option value="boxeo">Boxeo</option>
+                                        <option value="pilates">Pilates</option>
+                                        <option value="funcional">Funcional</option>
+                                    </select>
+                                    <label for="disciplinaPrueba">Disciplina</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="fechaPrueba" required min="">
+                                    <label for="fechaPrueba">Fecha deseada</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="horarioPrueba" required>
+                                        <option value="">Selecciona un horario</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="19:00">19:00</option>
+                                    </select>
+                                    <label for="horarioPrueba">Horario preferido</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="comentariosPrueba" style="height: 100px" placeholder="Comentarios adicionales"></textarea>
+                                    <label for="comentariosPrueba">Comentarios adicionales</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="cta-button">Reservar mi Clase de Prueba</button>
+                        </div>
+                    </form>
+
+                    <div id="confirmacionPrueba" class="text-center mt-4" style="display: none;">
+                        <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                        <h4>¡Reserva Exitosa!</h4>
+                        <p>Nos pondremos en contacto contigo pronto para confirmar tu clase de prueba.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Código existente del navbar mobile
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbar = document.querySelector('.navbar');
+            
+            navbarToggler.addEventListener('click', function() {
+                navbar.classList.toggle('mobile-menu-open');
+            });
+
+            // Manejo de submenús y modales
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const link = item.querySelector('.nav-link');
+                const submenu = item.querySelector('.submenu');
+                
+                if (submenu) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        item.classList.toggle('active');
+                        
+                        // Cerrar otros submenús
+                        navItems.forEach(otherItem => {
+                            if(otherItem !== item && otherItem.classList.contains('active')) {
+                                otherItem.classList.remove('active');
+                            }
+                        });
+                    });
+
+                    // Agregar event listeners para los enlaces del submenú
+                    const submenuLinks = submenu.querySelectorAll('a');
+                    submenuLinks.forEach(submenuLink => {
+                        submenuLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            
+                            // Obtener el ID del modal correspondiente
+                            const modalId = this.getAttribute('href').substring(1) + 'Modal';
+                            const modal = new bootstrap.Modal(document.getElementById(modalId));
+                            modal.show();
+                        });
+                    });
+                }
+            });
+
+            // Código existente del formulario de registro
+            const registrationForm = document.getElementById('registrationForm');
+            const successMessage = document.getElementById('successMessage');
+
+            registrationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Aquí podrías agregar la lógica para enviar los datos a un servidor
+                
+                // Mostrar mensaje de éxito
+                registrationForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Cerrar el modal después de 3 segundos
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
+                    modal.hide();
+                    
+                    // Resetear el formulario y los mensajes después de cerrar
+                    setTimeout(() => {
+                        registrationForm.reset();
+                        registrationForm.style.display = 'block';
+                        successMessage.style.display = 'none';
+                    }, 500);
+                }, 3000);
+            });
+
+            // Mostrar modal de promoción automáticamente después de 3 segundos
+            setTimeout(() => {
+                const promoModal = new bootstrap.Modal(document.getElementById('promoModal'));
+                promoModal.show();
+            }, 3000);
+
+            // Configuración mejorada del reproductor de música
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            const musicStatus = document.getElementById('musicStatus');
+            const volumeControl = document.getElementById('volumeControl');
+            const playIcon = musicToggle.querySelector('i.fas');
+            let isMusicPlaying = false;
+
+            // Establecer volumen inicial
+            backgroundMusic.volume = volumeControl.value;
+
+            // Control de volumen
+            volumeControl.addEventListener('input', function() {
+                backgroundMusic.volume = this.value;
+            });
+
+            // Precarga la música
+            backgroundMusic.load();
+
+            musicToggle.addEventListener('click', function() {
+                if (isMusicPlaying) {
+                    backgroundMusic.pause();
+                    musicToggle.classList.remove('btn-primary');
+                    musicToggle.classList.add('btn-dark');
+                    musicStatus.textContent = 'Reproducir música';
+                    playIcon.classList.remove('fa-pause');
+                    playIcon.classList.add('fa-play');
+                } else {
+                    // Intenta reproducir y maneja posibles errores
+                    const playPromise = backgroundMusic.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            // Reproducción exitosa
+                            musicToggle.classList.remove('btn-dark');
+                            musicToggle.classList.add('btn-primary');
+                            musicStatus.textContent = 'Pausar música';
+                            playIcon.classList.remove('fa-play');
+                            playIcon.classList.add('fa-pause');
+                        })
+                        .catch(error => {
+                            // Error en la reproducción
+                            console.error('Error al reproducir la música:', error);
+                            alert('Hubo un problema al reproducir la música. Por favor, intenta de nuevo.');
+                        });
+                    }
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+
+            // Manejo de errores de audio
+            backgroundMusic.addEventListener('error', function(e) {
+                console.error('Error en la carga de audio:', e);
+                alert('No se pudo cargar el archivo de música. Por favor, verifica que el archivo existe en la carpeta correcta.');
+            });
+
+            // Manejo del formulario de consultas
+            const consultaForm = document.getElementById('consultaForm');
+            if (consultaForm) {
+                consultaForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Aquí iría la lógica para enviar el formulario
+                    alert('¡Gracias por tu consulta! Te responderemos a la brevedad.');
+                    consultaForm.reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('consultasModal'));
+                    modal.hide();
+                });
+            }
+
+            // Configuración del formulario de clase de prueba
+            const clasePruebaForm = document.getElementById('clasePruebaForm');
+            const confirmacionPrueba = document.getElementById('confirmacionPrueba');
+            const fechaPrueba = document.getElementById('fechaPrueba');
+
+            // Establecer la fecha mínima como hoy
+            const today = new Date().toISOString().split('T')[0];
+            fechaPrueba.setAttribute('min', today);
+
+            if (clasePruebaForm) {
+                clasePruebaForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Aquí iría la lógica para enviar los datos al servidor
+                    
+                    // Mostrar mensaje de confirmación
+                    clasePruebaForm.style.display = 'none';
+                    confirmacionPrueba.style.display = 'block';
+                    
+                    // Cerrar el modal después de 3 segundos
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('clasePruebaModal'));
+                        modal.hide();
+                        
+                        // Resetear el formulario y los mensajes después de cerrar
+                        setTimeout(() => {
+                            clasePruebaForm.reset();
+                            clasePruebaForm.style.display = 'block';
+                            confirmacionPrueba.style.display = 'none';
+                        }, 500);
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
